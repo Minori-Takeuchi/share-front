@@ -4,35 +4,43 @@
     <form @submit.prevent="submit">
       <div>
         <label>Eメール</label>
-        <input type="text" v-model="form.email" />
+        <input type="text" v-model="email" />
       </div>
       <div>
         <label>パスワード</label>
-        <input type="password" v-model="form.password" />
+        <input type="password" v-model="password" />
       </div>
       <button type="submit">ログイン</button>
     </form>
   </div>
 </template>
 <script>
-import { mapActions } from 'vuex';
+import { ref } from "vue";
+import { useStore } from "vuex";
+import router from "../router";
+
 export default {
-  data() {
-    return {
-      form: {
-        email: '',
-        password: '',
-      },
+  setup() {
+    const email = ref("");
+    const password = ref("");
+
+    const store = useStore();
+
+    const submit = async () => {
+      const form = {
+        email: email.value,
+        password: password.value,
+      };
+      console.log(form.email)
+      await store.dispatch("login", form);
+      router.replace({ name: "Home" });
     };
-  },
-  methods: {
-    ...mapActions({
-      login: 'auth/login',
-    }),
-    async submit() {
-      await this.login(this.form);
-      this.$router.replace({ name: 'Home' });
-    },
+
+    return {
+      email,
+      password,
+      submit,
+    };
   },
 };
 </script>

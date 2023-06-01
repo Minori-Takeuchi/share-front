@@ -1,6 +1,12 @@
 // store/auth.js
+import { createStore } from "vuex";
 import axios from "axios";
-export default {
+const apiClient = axios.create({
+  baseURL: process.env.VUE_APP_BASE_URL,
+});
+apiClient.defaults.withCredentials = true;
+
+export default createStore({
   namespaced: true,
   state: {
     isAuth: false,
@@ -24,12 +30,12 @@ export default {
   },
   actions: {
     async login({ dispatch }, credentials) {
-      await axios.get("/sanctum/csrf-cookie");
-      await axios.post("/login", credentials);
+      await apiClient.get("/sanctum/csrf-cookie");
+      await apiClient.post("/api/login", credentials);
       return await dispatch("me");
     },
     async me({ commit }) {
-      return await axios
+      return await apiClient
         .get("/api/user")
         .then((response) => {
           commit("SET_IS_AUTH", true);
@@ -41,4 +47,4 @@ export default {
         });
     },
   },
-};
+})

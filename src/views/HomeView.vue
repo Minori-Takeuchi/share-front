@@ -2,6 +2,7 @@
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <p>{{ isLoggedIn }}</p>
   </div>
 </template>
 
@@ -13,6 +14,11 @@ export default {
   name: 'HomeView',
   components: {
     HelloWorld
+  },
+  computed: {
+    isLoggedIn() {
+      return this.$store.getters['auth/isAuth'];
+  }
   }
 }
 </script>
