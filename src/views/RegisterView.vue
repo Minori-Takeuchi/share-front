@@ -37,7 +37,7 @@ export default {
   methods: {
     async register() {
       try {
-        await apiClient.post("/api/register", this.form);
+        await apiClient.post("/register", this.form);
         this.$router.replace({ name: "Login" });
       } catch (error) {
         if (

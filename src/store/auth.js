@@ -3,8 +3,12 @@ import { createStore } from "vuex";
 import axios from "axios";
 const apiClient = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
+  withCredentials: true,
+  headers: {
+    "X-Requested-With": "XMLHttpRequest",
+    "Content-Type": "application/json",
+  },
 });
-apiClient.defaults.withCredentials = true;
 
 export default createStore({
   namespaced: true,
@@ -31,7 +35,7 @@ export default createStore({
   actions: {
     async login({ dispatch }, credentials) {
       await apiClient.get("/sanctum/csrf-cookie");
-      await apiClient.post("/api/login", credentials);
+      await apiClient.post("/login", credentials);
       return await dispatch("me");
     },
     async me({ commit }) {
@@ -47,4 +51,4 @@ export default createStore({
         });
     },
   },
-})
+});

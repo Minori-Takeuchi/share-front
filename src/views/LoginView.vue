@@ -31,11 +31,14 @@ export default {
         email: email.value,
         password: password.value,
       };
-      console.log(form.email)
-      await store.dispatch("login", form);
-      router.replace({ name: "Home" });
+      console.log(form)
+      try {
+        await store.dispatch("login", form);
+        router.replace({ name: "Home" });
+      } catch (error) {
+        console.log(error);
+      }
     };
-
     return {
       email,
       password,
