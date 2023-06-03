@@ -1,6 +1,7 @@
 // store/auth.js
 import { createStore } from "vuex";
 import axios from "axios";
+import createPersistedState from "vuex-persistedstate";
 const apiClient = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
   withCredentials: true,
@@ -11,6 +12,13 @@ const apiClient = axios.create({
 });
 
 export default createStore({
+  plugins: [
+    createPersistedState({
+      key: "auth",
+      paths: ["user", "isAuth"],
+      storage: window.sessionStorage,
+    }),
+  ],
   namespaced: true,
   state: {
     isAuth: false,
