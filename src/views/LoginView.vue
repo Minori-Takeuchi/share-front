@@ -31,7 +31,6 @@ export default {
         email: email.value,
         password: password.value,
       };
-      console.log(form)
       try {
         await store.dispatch("login", form);
         router.replace({ name: "Home" });

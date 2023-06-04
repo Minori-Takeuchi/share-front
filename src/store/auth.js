@@ -2,6 +2,7 @@
 import { createStore } from "vuex";
 import axios from "axios";
 import createPersistedState from "vuex-persistedstate";
+import router from "../router";
 const apiClient = axios.create({
   baseURL: process.env.VUE_APP_BASE_URL,
   withCredentials: true,
@@ -52,11 +53,23 @@ export default createStore({
         .then((response) => {
           commit("SET_IS_AUTH", true);
           commit("SET_USER", response.data);
+          apiClient.get("/sanctum/csrf-cookie");
         })
         .catch(() => {
           commit("SET_IS_AUTH", false);
           commit("SET_USER", null);
+          router.replace({ name: "Login" });
         });
+    },
+    async logout({ commit }) {
+      try {
+        await apiClient.post("/logout");
+        commit("SET_IS_AUTH", false);
+        commit("SET_USER", null);
+        router.replace({ name: "Login" });
+      } catch (error) {
+        console.error("Logout error:", error);
+      }
     },
   },
 });
