@@ -19,11 +19,10 @@
   </div>
 </template>
 <script>
-import axios from "axios";
-const apiClient = axios.create({
-  baseURL: process.env.VUE_APP_BASE_URL,
-});
-apiClient.defaults.withCredentials = true;
+import apiClient from '@/plugins/axios';
+
+const axios = apiClient;
+
 export default {
   data() {
     return {
@@ -37,7 +36,7 @@ export default {
   methods: {
     async register() {
       try {
-        await apiClient.post("/register", this.form);
+        await axios.post("/register", this.form);
         this.$router.replace({ name: "Login" });
       } catch (error) {
         if (

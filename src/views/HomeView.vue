@@ -2,7 +2,7 @@
   <div class="home">
     <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>
-    <button @click="logout">ログアウト</button>
+    <p>{{ user.name }}</p>
   </div>
 </template>
 
@@ -10,6 +10,7 @@
 // @ is an alias to /src
 import HelloWorld from '@/components/HelloWorld.vue'
 import { useStore } from "vuex";
+import { computed } from 'vue';
 
 export default {
   name: 'HomeView',
@@ -19,11 +20,11 @@ export default {
 setup() {
   const store = useStore();
 
-  const logout = () => {
-    store.dispatch('logout');
-  }
+  const user = computed(() => {
+      return store.state.user;
+    });
   return {
-    logout
+    user
   }
 }
 }

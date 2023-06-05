@@ -1,12 +1,15 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/register">Register</router-link> |
-    <router-link to="/login">Login</router-link>
-  </nav>
+  <SideBar v-if="this.$store.state.isAuth === true" />
   <router-view/>
 </template>
-
+<script>
+import SideBar from './components/SideBar.vue';
+export default {
+  components: {
+    SideBar
+  }
+}
+</script>
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

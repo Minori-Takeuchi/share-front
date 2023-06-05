@@ -1,16 +1,10 @@
 // store/auth.js
 import { createStore } from "vuex";
-import axios from "axios";
 import createPersistedState from "vuex-persistedstate";
 import router from "../router";
-const apiClient = axios.create({
-  baseURL: process.env.VUE_APP_BASE_URL,
-  withCredentials: true,
-  headers: {
-    "X-Requested-With": "XMLHttpRequest",
-    "Content-Type": "application/json",
-  },
-});
+import apiClient from "@/plugins/axios";
+
+const axios = apiClient;
 
 export default createStore({
   plugins: [
@@ -43,17 +37,17 @@ export default createStore({
   },
   actions: {
     async login({ dispatch }, credentials) {
-      await apiClient.get("/sanctum/csrf-cookie");
-      await apiClient.post("/login", credentials);
+      await axios.get("/sanctum/csrf-cookie");
+      await axios.post("/login", credentials);
       return await dispatch("me");
     },
     async me({ commit }) {
-      return await apiClient
+      return await axios
         .get("/api/user")
         .then((response) => {
           commit("SET_IS_AUTH", true);
           commit("SET_USER", response.data);
-          apiClient.get("/sanctum/csrf-cookie");
+          axios.get("/sanctum/csrf-cookie");
         })
         .catch(() => {
           commit("SET_IS_AUTH", false);
@@ -63,7 +57,7 @@ export default createStore({
     },
     async logout({ commit }) {
       try {
-        await apiClient.post("/logout");
+        await axios.post("/logout");
         commit("SET_IS_AUTH", false);
         commit("SET_USER", null);
         router.replace({ name: "Login" });
