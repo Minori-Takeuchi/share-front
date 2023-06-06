@@ -58,9 +58,9 @@ export default createStore({
     async logout({ commit }) {
       try {
         await axios.post("/logout");
+        router.replace({ name: "Login" });
         commit("SET_IS_AUTH", false);
         commit("SET_USER", null);
-        router.replace({ name: "Login" });
       } catch (error) {
         console.error("Logout error:", error);
       }

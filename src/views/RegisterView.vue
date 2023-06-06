@@ -14,12 +14,12 @@
         <label>パスワード</label>
         <input type="password" v-model="form.password" />
       </div>
-      <button type="submit">ログイン</button>
+      <button type="submit">ユーザー登録</button>
     </form>
   </div>
 </template>
 <script>
-import apiClient from '@/plugins/axios';
+import apiClient from "@/plugins/axios";
 
 const axios = apiClient;
 
@@ -36,18 +36,17 @@ export default {
   methods: {
     async register() {
       try {
-        await axios.post("/register", this.form);
+        await axios.get("/sanctum/csrf-cookie");
+        const response = await axios.post("/register", this.form);
+        if (!response) {
+          console.log('create error')
+          alert('作成に失敗しました')
+        }
+        console.log(response)
         this.$router.replace({ name: "Login" });
       } catch (error) {
-        if (
-          error.response &&
-          error.response.data &&
-          error.response.data.message
-        ) {
-          alert(error.response.data.message);
-        } else {
-          alert("新規作成に失敗しました");
-        }
+        console.log(error)
+        alert('作成に失敗しました')
       }
     },
   },
